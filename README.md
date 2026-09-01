@@ -67,9 +67,12 @@ zuständiges Gericht und Anwaltszwang, auf Basis von:
   Gerichtsstand" nach [§ 32 ZPO](https://www.gesetze-im-internet.de/zpo/__32.html).
 - [§ 23 Nr. 1 GVG](https://www.gesetze-im-internet.de/gvg/__23.html) — Streitwertgrenze
   zwischen Amtsgericht und Landgericht, aktuell 10.000 EUR (seit 1.1.2026 angehoben von
-  zuvor 5.000 EUR; für vor diesem Stichtag anhängig gemachte Altverfahren gilt weiterhin
-  die alte Grenze, hier nicht gesondert abgebildet). Als benannte Konstante
-  `GRENZWERT_AMTSGERICHT_EUR` in `app/zustaendigkeit/zustaendigkeit_checker.py` gepflegt.
+  zuvor 5.000 EUR). Für vor diesem Stichtag anhängig gemachte Altverfahren gilt weiterhin
+  die alte Grenze von 5.000 EUR — steuerbar über den optionalen Parameter
+  `verfahrensbeginn` von `pruefe_zustaendigkeit()`; ohne Angabe wird die aktuelle Grenze
+  angenommen. Konstanten: `GRENZWERT_AMTSGERICHT_EUR_AB_REFORM`,
+  `GRENZWERT_AMTSGERICHT_EUR_VOR_REFORM`, `STICHTAG_GVG_REFORM` in
+  `app/zustaendigkeit/zustaendigkeit_checker.py`.
 - [§ 78 Abs. 1 ZPO](https://www.gesetze-im-internet.de/zpo/__78.html) — Anwaltszwang vor
   dem Landgericht, nicht vor dem Amtsgericht.
 

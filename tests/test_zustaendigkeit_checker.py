@@ -1,9 +1,12 @@
 """Tests für zustaendigkeit_checker.py (§ 104a UrhG, § 23 Nr. 1 GVG, § 78 Abs. 1 ZPO)."""
 
 import unittest
+from datetime import date
 
 from app.zustaendigkeit.zustaendigkeit_checker import (
     GRENZWERT_AMTSGERICHT_EUR,
+    GRENZWERT_AMTSGERICHT_EUR_VOR_REFORM,
+    STICHTAG_GVG_REFORM,
     pruefe_zustaendigkeit,
 )
 
@@ -74,7 +77,7 @@ class FliegenderGerichtsstandTest(unittest.TestCase):
 
 
 class StreitwertGrenzeTest(unittest.TestCase):
-    """Grenzfälle rund um GRENZWERT_AMTSGERICHT_EUR (aktuell 5.000 EUR, § 23 Nr. 1 GVG)."""
+    """Grenzfälle rund um GRENZWERT_AMTSGERICHT_EUR (aktuell 10.000 EUR, § 23 Nr. 1 GVG)."""
 
     def test_streitwert_exakt_grenzwert_ist_landgericht(self):
         # ">=": bei exakt 5.000 EUR bereits Landgericht (Spezifikation, Grenzfall).
@@ -100,6 +103,42 @@ class ValidierungTest(unittest.TestCase):
     def test_negativer_streitwert_wirft_fehler(self):
         with self.assertRaises(ValueError):
             pruefe_zustaendigkeit(ist_natuerliche_person=True, gewerbliche_nutzung=False, streitwert=-1.0)
+
+
+class AltfallTest(unittest.TestCase):
+    """Vor dem Stichtag anhängig gemachte Verfahren behalten die alte 5.000-EUR-Grenze."""
+
+    def test_altfall_vor_stichtag_nutzt_alte_grenze(self):
+        ergebnis = pruefe_zustaendigkeit(
+            ist_natuerliche_person=True,
+            gewerbliche_nutzung=False,
+            streitwert=6000.0,
+            verfahrensbeginn=date(2025, 6, 1),
+        )
+        self.assertEqual(ergebnis.angewandte_streitwertgrenze_eur, GRENZWERT_AMTSGERICHT_EUR_VOR_REFORM)
+        self.assertIn("Landgericht", ergebnis.zustaendiges_gericht)
+        self.assertTrue(ergebnis.anwaltszwang)
+        self.assertIn("Altverfahren", ergebnis.kurzbegruendung)
+
+    def test_verfahren_exakt_am_stichtag_nutzt_neue_grenze(self):
+        # STICHTAG_GVG_REFORM selbst gilt bereits als "ab" Reform (nicht "davor").
+        ergebnis = pruefe_zustaendigkeit(
+            ist_natuerliche_person=True,
+            gewerbliche_nutzung=False,
+            streitwert=6000.0,
+            verfahrensbeginn=STICHTAG_GVG_REFORM,
+        )
+        self.assertEqual(ergebnis.angewandte_streitwertgrenze_eur, GRENZWERT_AMTSGERICHT_EUR)
+        self.assertIn("Amtsgericht", ergebnis.zustaendiges_gericht)
+        self.assertFalse(ergebnis.anwaltszwang)
+
+    def test_ohne_verfahrensbeginn_gilt_aktuelle_grenze(self):
+        ergebnis = pruefe_zustaendigkeit(
+            ist_natuerliche_person=True, gewerbliche_nutzung=False, streitwert=6000.0
+        )
+        self.assertEqual(ergebnis.angewandte_streitwertgrenze_eur, GRENZWERT_AMTSGERICHT_EUR)
+        self.assertIn("Amtsgericht", ergebnis.zustaendiges_gericht)
+        self.assertNotIn("Altverfahren", ergebnis.kurzbegruendung)
 
 
 if __name__ == "__main__":
