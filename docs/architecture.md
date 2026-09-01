@@ -31,6 +31,11 @@ flowchart TD
     B -. setzt initiale Frist .-> F
     C -. liest/aktualisiert Fristen .-> F
     D -. setzt neue Frist .-> F
+
+    subgraph Zuständigkeits-Checker
+        G[(§ 104a UrhG / § 32 ZPO<br/>§ 23 Nr. 1 GVG, § 78 Abs. 1 ZPO)]
+    end
+    D -. prüft Gerichtsstand, Gericht & Anwaltszwang .-> G
 ```
 
 **Verwendete Normen des UrhG:**
@@ -41,6 +46,7 @@ flowchart TD
 | § 97 UrhG | Anspruch auf Unterlassung und Schadensersatz — materielle Anspruchsgrundlage für die Forderung in der Abmahnung (Phase 2) und für die gerichtliche Geltendmachung bei Eskalation (Phase 4) |
 | § 97a UrhG | Abmahnung — regelt Form der Abmahnung und Kostenerstattung (inkl. Kostendeckelung nach Abs. 3 bei Verbrauchern); Grundlage für Phase 2 |
 | § 101 Abs. 9 UrhG | Gerichtlicher Gestattungsbeschluss für den Auskunftsanspruch gegenüber dem Access-Provider — Voraussetzung, um in Phase 1 die IP-Adresse einem Anschlussinhaber zuordnen zu lassen, und Tor zu Phase 2 |
+| § 104a UrhG | Ausschließlicher Gerichtsstand am Wohnsitz des Beklagten bei natürlichen Personen ohne gewerbliche/berufliche Nutzung — Grundlage des Zuständigkeits-Checkers in Phase 4 (siehe unten) |
 
 ## Module
 
@@ -76,3 +82,17 @@ Fälle, die bis zum Fristablauf keine Reaktion zeigen, oder die als Rot klassifi
 anwaltlich final negativ beschieden sind, werden mit neuem Fristdatum (Mahnverfahren/Klage,
 Standard: 3 Wochen) zurück in die zentrale Fristverwaltung überführt und laufen erneut durch
 Phase 3.
+
+## Zuständigkeits-Checker (Phase 4)
+
+Bevor eine Eskalation tatsächlich in eine Klage mündet, bestimmt `app/zustaendigkeit/` Gerichtsstand,
+sachlich zuständiges Gericht (Amtsgericht/Landgericht) und Anwaltszwang — als eigenständiges,
+von der Fallhistorie unabhängiges Modul (analog zu `app/fristverwaltung/`). Details, Live-Demo per
+CLI und Codebeispiel: Abschnitt "Zuständigkeits-Checker" in der [README](../README.md).
+
+- **Gerichtsstand:** § 104a UrhG (Wohnsitz des Beklagten) bei natürlichen Personen ohne
+  gewerbliche/berufliche Nutzung, sonst der allgemeine fliegende Gerichtsstand nach § 32 ZPO.
+- **Sachliche Zuständigkeit:** § 23 Nr. 1 GVG, Streitwertgrenze aktuell 10.000 EUR (seit
+  1.1.2026); für davor anhängig gemachte Altverfahren gilt weiterhin 5.000 EUR
+  (steuerbar über den Parameter `verfahrensbeginn`).
+- **Anwaltszwang:** § 78 Abs. 1 ZPO, nur vor dem Landgericht.
