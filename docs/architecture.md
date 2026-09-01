@@ -16,12 +16,12 @@ verarbeitet.
 
 ```mermaid
 flowchart TD
-    A[Phase 1: Ermittlung & Auskunft] -->|Gestattungsbeschluss erteilt| B[Phase 2: Abmahnung]
+    A["Phase 1: Ermittlung & Auskunft<br/>Gestattungsbeschluss § 101 Abs. 9 UrhG"] -->|Gestattungsbeschluss erteilt| B["Phase 2: Abmahnung<br/>Anspruch: § 97 UrhG (Unterlassung, Schadensersatz)<br/>verletztes Recht: § 19a UrhG (öffentl. Zugänglichmachung)<br/>Form/Kosten: § 97a UrhG"]
     B --> C[Phase 3: Fristüberwachung & Triage]
     C -->|Grün: Routine-Reaktion| E1[Automatischer Fallabschluss]
     C -->|Gelb: Klärungsbedarf| E2[Manuelle Prüfung]
     C -->|Rot: Widerspruch| E3[Anwaltliche Bearbeitung]
-    C -->|Keine Reaktion bis Frist| D[Phase 4: Eskalation]
+    C -->|Keine Reaktion bis Frist| D["Phase 4: Eskalation<br/>gerichtliche Geltendmachung des Anspruchs<br/>aus § 97 UrhG (Mahnverfahren/Klage)"]
     E3 --> D
     D -->|Neues Fristdatum: Mahnverfahren/Klage| C
 
@@ -32,6 +32,15 @@ flowchart TD
     C -. liest/aktualisiert Fristen .-> F
     D -. setzt neue Frist .-> F
 ```
+
+**Verwendete Normen des UrhG:**
+
+| Norm | Bedeutung im Workflow |
+|---|---|
+| § 19a UrhG | Recht der öffentlichen Zugänglichmachung — das durch Filesharing verletzte Verwertungsrecht; Grundlage der Rechtsverletzung, die in Phase 1 ermittelt wird |
+| § 97 UrhG | Anspruch auf Unterlassung und Schadensersatz — materielle Anspruchsgrundlage für die Forderung in der Abmahnung (Phase 2) und für die gerichtliche Geltendmachung bei Eskalation (Phase 4) |
+| § 97a UrhG | Abmahnung — regelt Form der Abmahnung und Kostenerstattung (inkl. Kostendeckelung nach Abs. 3 bei Verbrauchern); Grundlage für Phase 2 |
+| § 101 Abs. 9 UrhG | Gerichtlicher Gestattungsbeschluss für den Auskunftsanspruch gegenüber dem Access-Provider — Voraussetzung, um in Phase 1 die IP-Adresse einem Anschlussinhaber zuordnen zu lassen, und Tor zu Phase 2 |
 
 ## Module
 
