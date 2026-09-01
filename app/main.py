@@ -47,9 +47,9 @@ def dashboard(request: Request):
     faelle = list_faelle()
     heute = date.today()
     return templates.TemplateResponse(
+        request,
         "dashboard.html",
         {
-            "request": request,
             "faelle": faelle,
             "heute": heute,
             "frist_abgelaufen": frist_abgelaufen,
@@ -63,8 +63,9 @@ def dashboard(request: Request):
 def fall_detail(request: Request, fall_id: int):
     fall = _fall_or_404(fall_id)
     return templates.TemplateResponse(
+        request,
         "fall_detail.html",
-        {"request": request, "fall": fall, "heute": date.today(), "eskalierbar": eskalierbar},
+        {"fall": fall, "heute": date.today(), "eskalierbar": eskalierbar},
     )
 
 
