@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+massenverfahren.db
+output/abmahnungen/*.md
+!output/abmahnungen/.gitkeep
+.DS_Store
