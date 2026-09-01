@@ -19,15 +19,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-GRENZWERT_AMTSGERICHT_EUR = 5_000.0
+GRENZWERT_AMTSGERICHT_EUR = 10_000.0
 """Streitwertgrenze Amtsgericht/Landgericht nach § 23 Nr. 1 GVG.
 
-Achtung, Stand-Hinweis: Zum 1. Januar 2026 wurde diese Grenze durch das Gesetz vom
-8. Dezember 2025 von 5.000 EUR auf 10.000 EUR angehoben (für ab diesem Zeitpunkt
-anhängig gemachte Verfahren; für Altverfahren gilt weiterhin die alte Grenze). Dieser
-Prototyp verwendet bewusst den Wert 5.000 EUR als benannte Konstante — für eine nach
-aktueller Rechtslage zutreffende Aussage müsste die Konstante auf 10.000 EUR angepasst
-werden.
+Stand-Hinweis: Zum 1. Januar 2026 wurde diese Grenze durch das Gesetz vom 8. Dezember 2025
+von 5.000 EUR auf 10.000 EUR angehoben (für ab diesem Zeitpunkt anhängig gemachte
+Verfahren; für zuvor anhängig gemachte Altverfahren gilt weiterhin die alte Grenze von
+5.000 EUR — hier nicht separat abgebildet, da der Prototyp keine Altfall-Unterscheidung
+nach Verfahrensbeginn trifft).
 """
 
 

@@ -66,10 +66,10 @@ zuständiges Gericht und Anwaltszwang, auf Basis von:
   Werk nicht gewerblich/beruflich genutzt hat; sonst gilt der allgemeine "fliegende
   Gerichtsstand" nach [§ 32 ZPO](https://www.gesetze-im-internet.de/zpo/__32.html).
 - [§ 23 Nr. 1 GVG](https://www.gesetze-im-internet.de/gvg/__23.html) — Streitwertgrenze
-  zwischen Amtsgericht und Landgericht. **Hinweis:** Diese Grenze wurde zum 1.1.2026 von
-  5.000 EUR auf 10.000 EUR angehoben; der Prototyp nutzt aktuell den Wert 5.000 EUR als
-  benannte Konstante (`GRENZWERT_AMTSGERICHT_EUR` in
-  `app/zustaendigkeit/zustaendigkeit_checker.py`) — bei Bedarf dort anpassen.
+  zwischen Amtsgericht und Landgericht, aktuell 10.000 EUR (seit 1.1.2026 angehoben von
+  zuvor 5.000 EUR; für vor diesem Stichtag anhängig gemachte Altverfahren gilt weiterhin
+  die alte Grenze, hier nicht gesondert abgebildet). Als benannte Konstante
+  `GRENZWERT_AMTSGERICHT_EUR` in `app/zustaendigkeit/zustaendigkeit_checker.py` gepflegt.
 - [§ 78 Abs. 1 ZPO](https://www.gesetze-im-internet.de/zpo/__78.html) — Anwaltszwang vor
   dem Landgericht, nicht vor dem Amtsgericht.
 

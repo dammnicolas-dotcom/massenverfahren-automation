@@ -22,7 +22,9 @@ class WohnsitzgerichtTest(unittest.TestCase):
 
     def test_hoher_streitwert_landgericht_mit_anwaltszwang(self):
         ergebnis = pruefe_zustaendigkeit(
-            ist_natuerliche_person=True, gewerbliche_nutzung=False, streitwert=6000.0
+            ist_natuerliche_person=True,
+            gewerbliche_nutzung=False,
+            streitwert=GRENZWERT_AMTSGERICHT_EUR + 1000.0,
         )
         self.assertEqual(ergebnis.gerichtsstand_norm, "§ 104a UrhG")
         self.assertIn("Landgericht", ergebnis.zustaendiges_gericht)
@@ -63,7 +65,9 @@ class FliegenderGerichtsstandTest(unittest.TestCase):
 
     def test_fliegender_gerichtsstand_hoher_streitwert_landgericht(self):
         ergebnis = pruefe_zustaendigkeit(
-            ist_natuerliche_person=False, gewerbliche_nutzung=False, streitwert=9000.0
+            ist_natuerliche_person=False,
+            gewerbliche_nutzung=False,
+            streitwert=GRENZWERT_AMTSGERICHT_EUR + 1000.0,
         )
         self.assertIn("Landgericht", ergebnis.zustaendiges_gericht)
         self.assertTrue(ergebnis.anwaltszwang)
