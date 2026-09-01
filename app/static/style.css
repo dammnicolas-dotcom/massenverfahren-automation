@@ -1,0 +1,92 @@
+:root {
+  color-scheme: light dark;
+  --gruen: #2e7d32;
+  --gelb: #f9a825;
+  --rot: #c62828;
+  --unbekannt: #9e9e9e;
+  --border: #d0d0d0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  line-height: 1.5;
+}
+
+header h1 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hinweis {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+
+table.detail th {
+  width: 12rem;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.ampel-punkt {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.ampel-gruen { background: var(--gruen); }
+.ampel-gelb { background: var(--gelb); }
+.ampel-rot { background: var(--rot); }
+.ampel-unbekannt { background: var(--unbekannt); }
+
+tr.ampel-gruen { background: rgba(46, 125, 50, 0.08); }
+tr.ampel-gelb { background: rgba(249, 168, 37, 0.10); }
+tr.ampel-rot { background: rgba(198, 40, 40, 0.10); }
+
+.warnung {
+  color: var(--rot);
+  font-weight: bold;
+}
+
+.fall-form {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 28rem;
+}
+
+.fall-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.fall-form input, .fall-form select, .fall-form textarea {
+  padding: 0.4rem;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
+section {
+  margin-bottom: 2rem;
+}

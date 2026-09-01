@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – Massenverfahren Case-Management{% endblock %}
+{% block content %}
+
+<section class="neuer-fall">
+  <h2>Neuen Fall anlegen (Phase 1: Ermittlung &amp; Auskunft)</h2>
+  <form method="post" action="/faelle" class="fall-form">
+    <label>IP-Adresse (Dummy)
+      <input type="text" name="ip_adresse" placeholder="203.0.113.42" required>
+    </label>
+    <label>Werk
+      <input type="text" name="werk" placeholder="Titel des Spiels" required>
+    </label>
+    <label>Mandant
+      <input type="text" name="mandant" placeholder="Fiktiver Publisher" required>
+    </label>
+    <label>Gestattungsbeschluss (§ 101 Abs. 9 UrhG)
+      <select name="gestattungsbeschluss_status">
+        {% for s in gestattungsbeschluss_status %}
+        <option value="{{ s.value }}">{{ s.value }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Forderungshöhe (EUR)
+      <input type="number" step="0.01" name="forderungshoehe_euro" value="850.00" required>
+    </label>
+    <button type="submit">Fall anlegen</button>
+  </form>
+</section>
+
+<section class="uebersicht">
+  <h2>Fallübersicht nach Ampelfarbe</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Ampel</th>
+        <th>ID</th>
+        <th>Werk</th>
+        <th>Mandant</th>
+        <th>Status</th>
+        <th>Gestattungsbeschluss</th>
+        <th>Frist</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fall in faelle %}
+      <tr class="ampel-{{ fall.ampel.value }}">
+        <td><span class="ampel-punkt ampel-{{ fall.ampel.value }}" title="{{ fall.ampel.value }}"></span></td>
+        <td><a href="/faelle/{{ fall.id }}">#{{ fall.id }}</a></td>
+        <td>{{ fall.werk }}</td>
+        <td>{{ fall.mandant }}</td>
+        <td>{{ fall.status.value }}</td>
+        <td>{{ fall.gestattungsbeschluss_status.value }}</td>
+        <td>
+          {% if fall.frist_datum %}
+            {{ fall.frist_datum.isoformat() }}
+            {% if frist_abgelaufen(fall.frist_datum, heute) %}<span class="warnung">abgelaufen</span>{% endif %}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          {% if eskalierbar(fall, heute) %}<span class="warnung">eskalierbar</span>{% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8">Noch keine Fälle angelegt. Lege oben einen Fall an oder führe <code>python seed.py</code> aus.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% endblock %}

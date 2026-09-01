@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Fall #{{ fall.id }} – Massenverfahren Case-Management{% endblock %}
+{% block content %}
+
+<p><a href="/">&larr; zurück zum Dashboard</a></p>
+
+<h2>Fall #{{ fall.id }}: {{ fall.werk }} <span class="ampel-punkt ampel-{{ fall.ampel.value }}"></span></h2>
+
+<table class="detail">
+  <tr><th>Mandant</th><td>{{ fall.mandant }}</td></tr>
+  <tr><th>IP-Adresse (Dummy)</th><td>{{ fall.ip_adresse }}</td></tr>
+  <tr><th>Zeitstempel</th><td>{{ fall.zeitstempel }}</td></tr>
+  <tr><th>Gestattungsbeschluss</th><td>{{ fall.gestattungsbeschluss_status.value }}</td></tr>
+  <tr><th>Forderungshöhe</th><td>{{ "%.2f"|format(fall.forderungshoehe_euro) }} EUR</td></tr>
+  <tr><th>Status</th><td>{{ fall.status.value }}</td></tr>
+  <tr><th>Ampel</th><td>{{ fall.ampel.value }}</td></tr>
+  <tr><th>Frist</th><td>{{ fall.frist_datum.isoformat() if fall.frist_datum else "—" }}</td></tr>
+  <tr><th>Eskalationsstufe</th><td>{{ fall.eskalationsstufe }}</td></tr>
+  <tr><th>Notiz</th><td>{{ fall.notiz or "—" }}</td></tr>
+  <tr><th>Reaktion (Text)</th><td>{{ fall.reaktion_text or "— noch keine Reaktion erfasst —" }}</td></tr>
+</table>
+
+<section class="aktionen">
+  <h3>Phase 2: Abmahnung</h3>
+  {% if fall.abmahnung_pfad %}
+    <p><a href="/faelle/{{ fall.id }}/abmahnung">Abmahnschreiben ansehen</a></p>
+  {% else %}
+    <form method="post" action="/faelle/{{ fall.id }}/abmahnung">
+      <button type="submit">Abmahnung erzeugen</button>
+    </form>
+  {% endif %}
+
+  <h3>Phase 3: Reaktion erfassen &amp; Triage</h3>
+  <form method="post" action="/faelle/{{ fall.id }}/reaktion" class="fall-form">
+    <label>Eingegangene Reaktion (Freitext, z. B. E-Mail-Inhalt)
+      <textarea name="reaktion_text" rows="3" placeholder="z. B. 'anbei die unterschriebene Unterlassungserklärung...'" required></textarea>
+    </label>
+    <button type="submit">Reaktion registrieren (klassifiziert automatisch)</button>
+  </form>
+
+  <h3>Phase 4: Eskalation</h3>
+  {% if eskalierbar(fall, heute) %}
+    <form method="post" action="/faelle/{{ fall.id }}/eskalieren">
+      <button type="submit">Eskalieren (Mahnverfahren/Klage, neue Frist)</button>
+    </form>
+  {% else %}
+    <p class="hinweis">Nicht eskalierbar (Frist noch offen, Fall bereits abgeschlossen/eskaliert, oder kein Rot-Status ohne Reaktion).</p>
+  {% endif %}
+</section>
+
+{% endblock %}
