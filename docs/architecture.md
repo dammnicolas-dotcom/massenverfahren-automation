@@ -54,6 +54,7 @@ Jede Phase ist ein eigenes Python-Package unter `app/`, kommunizierend über ein
 | `app/fristverwaltung/` | Zentrale Fristverwaltung; vendored aus dem separaten `fristenwaechter`-Projekt (`frist_berechnung.py`, §§ 187-193 BGB / § 222 ZPO) |
 | `app/triage/` | Regelbasierte Ampel-Klassifizierung eingehender Reaktionen (Grün/Gelb/Rot), konfigurierbar über `rules.py` |
 | `app/eskalation/` | Setzt Fälle ohne Reaktion oder mit Rot-Status mit neuer Frist zurück in die Fristverwaltung |
+| `app/zustaendigkeit/` | Zuständigkeits-Checker für Phase 4 (Klage): Gerichtsstand (§ 104a UrhG / § 32 ZPO), Amtsgericht/Landgericht (§ 23 Nr. 1 GVG), Anwaltszwang (§ 78 Abs. 1 ZPO) |
 | `app/main.py` | FastAPI-App, Web-Dashboard (Ampel-Übersicht aller Fälle) |
 
 ## Ampel-Logik (Phase 3)

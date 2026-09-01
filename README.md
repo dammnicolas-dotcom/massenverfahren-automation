@@ -18,6 +18,8 @@ Architektur (Mermaid-Flowchart, Modulübersicht): [docs/architecture.md](docs/ar
   `fristenwaechter`-Projekt: §§ 187-193 BGB, § 222 ZPO)
 - `app/triage/` — Phase 3: regelbasierte Ampel-Klassifizierung eingehender Reaktionen
 - `app/eskalation/` — Phase 4: Eskalation bei Fristablauf ohne Reaktion oder Rot-Status
+- `app/zustaendigkeit/` — Zuständigkeits-Checker für eine gerichtliche Geltendmachung
+  (Gerichtsstand, Amtsgericht/Landgericht, Anwaltszwang; siehe Abschnitt unten)
 - `app/main.py` — FastAPI-App, Web-Dashboard
 
 ## Prototyp starten
@@ -48,8 +50,42 @@ Auf dem Dashboard lassen sich neue Fälle anlegen; auf der Detailseite eines Fal
 kann eine Abmahnung erzeugt, eine eingehende Reaktion erfasst (wird automatisch nach
 Ampelfarbe klassifiziert) und ein Fall eskaliert werden.
 
-Tests für die Fristberechnung ausführen:
+Tests ausführen (Fristberechnung + Zuständigkeits-Checker):
 
 ```bash
 python -m unittest discover -s tests
+```
+
+## Zuständigkeits-Checker
+
+Bestimmt für eine mögliche Klage gegen den Anschlussinhaber Gerichtsstand, sachlich
+zuständiges Gericht und Anwaltszwang, auf Basis von:
+
+- [§ 104a UrhG](https://www.gesetze-im-internet.de/urhg/__104a.html) — ausschließlicher
+  Gerichtsstand am Wohnsitz des Beklagten, wenn dieser eine natürliche Person ist, die das
+  Werk nicht gewerblich/beruflich genutzt hat; sonst gilt der allgemeine "fliegende
+  Gerichtsstand" nach [§ 32 ZPO](https://www.gesetze-im-internet.de/zpo/__32.html).
+- [§ 23 Nr. 1 GVG](https://www.gesetze-im-internet.de/gvg/__23.html) — Streitwertgrenze
+  zwischen Amtsgericht und Landgericht. **Hinweis:** Diese Grenze wurde zum 1.1.2026 von
+  5.000 EUR auf 10.000 EUR angehoben; der Prototyp nutzt aktuell den Wert 5.000 EUR als
+  benannte Konstante (`GRENZWERT_AMTSGERICHT_EUR` in
+  `app/zustaendigkeit/zustaendigkeit_checker.py`) — bei Bedarf dort anpassen.
+- [§ 78 Abs. 1 ZPO](https://www.gesetze-im-internet.de/zpo/__78.html) — Anwaltszwang vor
+  dem Landgericht, nicht vor dem Amtsgericht.
+
+Live-Demo per CLI:
+
+```bash
+python -m app.zustaendigkeit.zustaendigkeit_checker
+```
+
+Als Bibliotheksfunktion:
+
+```python
+from app.zustaendigkeit.zustaendigkeit_checker import pruefe_zustaendigkeit
+
+ergebnis = pruefe_zustaendigkeit(
+    ist_natuerliche_person=True, gewerbliche_nutzung=False, streitwert=4500.0
+)
+print(ergebnis.zustaendiges_gericht)  # "Amtsgericht am Wohnsitz des Beklagten (§ 104a UrhG)"
 ```
