@@ -1,6 +1,6 @@
 # Massenverfahren Automation (Prototyp)
 
-Erster Prototyp für einen automatisierten Case-Management-Workflow für
+Prototyp für einen automatisierten Case-Management-Workflow für
 Filesharing-Massenabmahnverfahren (Urheberrecht, Gaming-Publisher als fiktive Mandanten).
 
 **Kein Produktivsystem.** Keine Anbindung an echte Mandantendaten, keine echten Personendaten,
